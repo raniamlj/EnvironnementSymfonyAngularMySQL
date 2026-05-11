@@ -232,6 +232,7 @@ Créer le projet Angular :
 
 ```bash
 ng new frontend-app
+cd frontend-app
 ```
 
 Réponses recommandées :
