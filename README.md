@@ -180,7 +180,7 @@ Créer la base :
 php bin/console doctrine:database:create
 ```
 
-Lancer le serveur Symfony :
+Lancer le serveur Symfony : entrer dans le dossier cd skeleton 
 
 ```bash
 symfony server:start --allow-http --no-tls --port=8000
