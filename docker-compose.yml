@@ -1,0 +1,94 @@
+version: '3.9'
+
+services:
+
+  # =========================
+  # MYSQL
+  # =========================
+  mysql:
+    image: mysql:8.0
+    container_name: fullstack_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: employee_db
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fullstack_network
+
+  # =========================
+  # PHPMYADMIN
+  # =========================
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: fullstack_phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"
+    networks:
+      - fullstack_network
+
+  # =========================
+  # SYMFONY BACKEND
+  # =========================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fullstack_backend
+    restart: always
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DATABASE_URL: "mysql://symfony:symfony@mysql:3306/employee_db?serverVersion=8.0"
+    command: tail -f /dev/null
+    networks:
+      - fullstack_network
+
+  # =========================
+  # ANGULAR FRONTEND
+  # =========================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fullstack_frontend
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "4200:4200"
+    command: tail -f /dev/null
+    depends_on:
+      - backend
+    networks:
+      - fullstack_network
+
+# =========================
+# NETWORKS
+# =========================
+networks:
+  fullstack_network:
+
+# =========================
+# VOLUMES
+# =========================
+volumes:
+  mysql_data:
