@@ -231,7 +231,7 @@ docker compose exec frontend bash
 Créer le projet Angular :
 
 ```bash
-ng new .
+ng new frontend-app
 ```
 
 Réponses recommandées :
