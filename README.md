@@ -368,10 +368,58 @@ docker compose down -v --rmi all
 
 ---
 
-# Ressources utiles
+Pour relancer ton projet une prochaine fois, les étudiants doivent simplement suivre un workflow très simple (sans recréer Symfony ou Angular).
 
-- Symfony Documentation
-- Angular Documentation
-- Docker Documentation
-- MySQL Documentation
-- phpMyAdmin Documentation
+🚀 1. Se placer dans le projet
+cd project
+🚀 2. Démarrer Docker
+docker compose up -d
+
+👉 -d = mode détaché (en arrière-plan)
+
+🚀 3. Vérifier que tout tourne
+docker ps
+
+Tu dois voir :
+
+backend
+frontend
+mysql
+phpmyadmin
+🚀 4. Lancer Symfony (backend)
+docker compose exec backend bash
+
+Puis :
+
+cd skeleton   # ou ton dossier Symfony
+php -S 0.0.0.0:8000 -t public
+
+👉 ou si Symfony CLI fonctionne :
+
+symfony server:start --allow-http --no-tls --port=8000 --allow-all-ip
+🚀 5. Lancer Angular (frontend)
+docker compose exec frontend bash
+
+Puis :
+
+cd frontend-app   # ou ton dossier Angular
+ng serve --host 0.0.0.0 --poll=2000
+🌐 6. Accès navigateur
+Service	URL
+Angular	http://localhost:4200
+
+Symfony API	http://localhost:8000
+
+phpMyAdmin	http://localhost:8081
+🧠 Résumé ultra simple 
+1. docker compose up -d
+2. backend → lancer Symfony
+3. frontend → ng serve
+⚠️ Important
+
+❌ Ne pas refaire :
+
+composer create-project
+ng new
+
+👉 ces étapes sont uniquement pour la première installation
